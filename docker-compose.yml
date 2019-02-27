@@ -1,0 +1,19 @@
+version: '3'
+services:
+  www:
+    container_name: 151--testy44
+
+    volumes:
+      - /opt/app/:/opt/app/
+    ports:
+      - "80:80"
+    build:
+      context: .
+
+  postgres:
+    image: postgres:11-alpine
+    volumes:
+      - /opt/app/db/:/var/lib/postgresql/data
+    environment:
+      POSTGRES_PASSWORD: postgres
+      POSTGRES_DB: mydbname

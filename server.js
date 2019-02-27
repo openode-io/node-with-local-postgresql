@@ -10,38 +10,23 @@ var http = require('http');
 
 const { Client } = require('pg')
 
-const client = new Client({
-  user: 'postgres',
-  host: 'localhost',
-  // database: 'mydb',
-  password: '',
-  port: 5432,
-})
-
-client.connect()
-
-client.query('CREATE DATABASE mydb', (err, res) => {
-  console.log(err, res)
-  client.end()
-
-  const clientWithDb = new Client({
+setTimeout(() => {
+  const client = new Client({
     user: 'postgres',
-    host: 'localhost',
-    database: 'mydb',
-    password: '',
-    port: 5432,
+    host: 'postgres',
+    database: 'mydbname',
+    password: 'postgres',
+    port: 5432
   })
 
-  clientWithDb.connect()
+  client.connect()
 
-  console.log('reconnected...')
-
-  clientWithDb.query('CREATE TABLE if not exists mytable ( name text )', (err, res) => {
+  client.query('CREATE TABLE if not exists mytable ( name text )', (err, res) => {
     console.log('created table?')
     console.log(err, res)
-    clientWithDb.end()
+    client.end()
   })
-})
+}, 5000)
 
 /**
  * Get port from environment and store in Express.
