@@ -1,11 +1,9 @@
-#!/usr/bin/env node
 
 /**
  * Module dependencies.
  */
 
 var app = require('./app');
-var debug = require('debug')('test');
 var http = require('http');
 
 const { Client } = require('pg')
@@ -22,9 +20,15 @@ setTimeout(() => {
   client.connect()
 
   client.query('CREATE TABLE if not exists mytable ( name text )', (err, res) => {
-    console.log('created table?')
     console.log(err, res)
-    client.end()
+    client.query(`INSERT INTO mytable (name) VALUES ('hi')`, (err, res) => {
+      console.log(err, res)
+      client.query('SELECT * FROM mytable', (err, res) => {
+        console.log(err, res)
+        client.end()
+      })
+
+    })
   })
 }, 5000)
 
@@ -112,5 +116,4 @@ function onListening() {
   var bind = typeof addr === 'string'
     ? 'pipe ' + addr
     : 'port ' + addr.port;
-  debug('Listening on ' + bind);
 }
